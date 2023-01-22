@@ -7,7 +7,7 @@ import spriteRunLeft from '../image/spriteRunLeft.png';
 import spriteRunRight from '../image/spriteRunRight.png';
 import spriteStandLeft from '../image/spriteStandLeft.png';
 import spriteStandRight from '../image/spriteStandRight.png';
-
+// import Victory from '../audio/victory.mp3';
 
 const canvas = document.querySelector('canvas');
 const c = canvas.getContext('2d');
@@ -301,14 +301,112 @@ else if(
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+function winCelebration() {
+  // Stop the game loop
+  cancelAnimationFrame(animate);
+
+ 
+     // Play a victory jingle
+     
+     
+ 
+
+  // Show a "win" animation on player
+  player.image = player.sprites.stand.right;
+  player.currentCropWidth = 177;
+  player.frames = 30;
+
+  
+  
+  // Create an array to store the fireworks
+  let fireworks = [];
+  
+  // Create a function to draw the fireworks
+  function drawFireworks() {
+      c.clearRect(0, 0, canvas.width, canvas.height);
+      for (let i = 0; i < fireworks.length; i++) {
+          let firework = fireworks[i];
+          firework.draw();
+          firework.update();
+          if (firework.position.y > canvas.height) {
+              fireworks.splice(i, 1);
+          }
+      }
+  }
+  
+  
+  // Create a class for the fireworks
+  class Firework {
+      constructor() {
+          this.position = {
+              x: Math.random() * canvas.width,
+              y: canvas.height
+          }
+          this.color = `hsl(${Math.random() * 360}, 100%, 50%)`;
+          this.radius = Math.random() * 10 + 5;
+          this.velocity = {
+              x: Math.random() * 2 - 1,
+              y: Math.random() * -10 - 5
+          }
+      }
+
+
+      
+      draw() {
+          c.beginPath();
+          c.arc(this.position.x, this.position.y, this.radius, 0, Math.PI * 2);
+          c.fillStyle = this.color;
+          c.fill();
+          c.closePath();
+          // Draw the win message
+  c.fillStyle = "white";
+  c.font = "40px Arial";
+  c.fillText("Congratulations, you win!", 300, 300);
+      }
+      update() {
+          this.position.x += this.velocity.x;
+          this.position.y += this.velocity.y;
+      }
+  }
+  
+  // Create an interval to add new fireworks
+  let interval = setInterval(function() {
+      fireworks.push(new Firework());
+  }, 100);
+  
+  // Create a loop to animate the fireworks
+  function animateFireworks() {
+      drawFireworks();
+      requestAnimationFrame(animateFireworks);
+  }
+  animateFireworks();
+  
+  ////////////////
+  
+  
+  // Set a timeout to stop the animation and clear the interval
+  setTimeout(function() {
+      clearInterval(interval);
+      c.clearRect(0, 0, canvas.width, canvas.height);
+      
+  }, 3000);
+  
+}
+
+
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     ////////////////////win condition
     if (scrollOffset > platformImage.width *5 + 300 -2){
-        console.log('you win')
-        // window.alert('You win')
-        // init()
+        //  window.alert('You win')
+        //  animate()
+        c.fillStyle = "white";
+        c.font = "40px Arial";
+        c.fillText("wanna try again!", 300, 300);
+        winCelebration()
+        
+ 
        
       }   
       
