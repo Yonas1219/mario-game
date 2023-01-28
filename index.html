@@ -6,16 +6,25 @@
     <style>
       body {
         margin: 0;
-        background-color: black;
+        background-color: #307c73;
         display: flex;
         align-items: center;
         justify-content: center;
         height: 100vh;
       }
+ 
     </style>
   </head>
   <body>
-    <canvas></canvas>
-    <script src="./js/main.js"></script>
+    <canvas>
+      <!-- <div id="score" ></div> -->
+
+    </canvas>
+    <div id="restart-button-container">
+      <button id="restart-button" onclick="location.reload()">Play Again</button>
+    </div>
+    <!-- <audio id="win" src="../src/audio/win.wav"  autoplay ></audio> -->
+
+        <script src="./js/main.js"></script>
   </body>
 </html>
