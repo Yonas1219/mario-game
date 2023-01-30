@@ -7,7 +7,7 @@ import spriteRunLeft from "../image/spriteRunLeft.png";
 import spriteRunRight from "../image/spriteRunRight.png";
 import spriteStandLeft from "../image/spriteStandLeft.png";
 import spriteStandRight from "../image/spriteStandRight.png";
-import win from '../audio/win.wav';
+// import win from '../audio/win.wav';
 // import coinimage from '../image/coin.jpeg';
 const canvas = document.querySelector("canvas");
 const c = canvas.getContext("2d");
@@ -21,7 +21,7 @@ const gravity = 1.5;
 // var scorebtn = document.getElementById("score");
 // var scoreBtn = document.getElementById("score_btn");
 var restartButton = document.getElementById("restart-button");
-var winSound = new Audio(win.wav);
+// var winSound = new Audio(win.wav);
 class Player {
   
   constructor() {
@@ -61,7 +61,7 @@ class Player {
       this.currentSprite,
       this.currentCropWidth * this.frames,
       0,
-      this.currentCropWidth, ///////////////////////// to make the avatar one
+      this.currentCropWidth, // to make the avatar one
       400,
       this.position.x,
       this.position.y,
@@ -91,11 +91,8 @@ class Player {
     if (this.position.y + this.height + this.velocity.y <= canvas.height)
       this.velocity.y += gravity;
    
-    if (scrollOffset > platformImage.width * 5 + 300 - 2) {
+    if (scrollOffset >  platformImage.width * 10 + 1150 -2) {
       restartButton.style.display = "block";
-      // scorebtn.style.display = "none";
-      // this.score += 5;
-      // passObstacle()
     }
     
     else{
@@ -104,7 +101,7 @@ class Player {
     }
 }
 }
-  //////////////////////////////////////////// reset the game
+  // reset the game
   restartButton.addEventListener("click", function () {
     // reset game state
     gameWon = false;
@@ -121,27 +118,6 @@ class Player {
     draw();
   });
   
-////////////////////////////////////////////////////////// score /
-// function score(){
-//   scorebtn.style.display = "block";
-//   let score = 0;
-//   setInterval(() => {
-//       score++;
-//       console.log(score);
-//   }, 1000);
-// }
-
-
- 
-  
-
-
-// scoreBtn.addEventListener("click", function(){
-//   score += 10;
-//   document.getElementById("score").innerHTML = score
-// });
-
-  ////////////////////////////////////////////////////////////////
 
 class Platform {
   constructor({ x, y, image }) {
@@ -160,34 +136,6 @@ class Platform {
 }
 
 
-
-// class Coin{
-//   constructor ({ x, y, image }) {
-//     this.speed = 0;
-//     this.position = {
-//       x,
-//       y
-//     };
-//     this.image = image;
-//     this.width = image.width;
-//     this.height = image.height;
-//     this.velocity = {
-//       x,
-//       y
-//     }
-//   }
-//   draw() {
-//     c.drawImage(this.image, this.position.x, this.position.y);
-//   }
-//   undraw(){
-//     let backgroundImg = createImage(background);
-//     c.clearRect(this.position.x, this.position.y, this.width, this.height);
-//     c.drawImage(this.position.x, this.position.y,backgroundImg);
-//   }
- 
-
-// } 
-
 class GenericObject {
   constructor({ x, y, image }) {
     this.position = {
@@ -204,12 +152,6 @@ class GenericObject {
   }
 }
 
-//////////////////////////////////////////////// play sound
-function playSound() {
-    soundEffect.currentTime = 0;
-    soundEffect.volume = 0.5;
-    soundEffect.play();
-}
 
 
 function createImage(imageSrc) {
@@ -231,6 +173,12 @@ const keys = {
   left: {
     pressed: false,
   },
+  pause: {
+    pressed: false,
+  }, 
+  play: {
+    pressed: false,
+  }
 };
 
 let scrollOffset = 0;
@@ -241,7 +189,7 @@ function init() {
   platforms = [
     new Platform({
       x:platformImage.width * 4 +
-        300 -
+        500 -
         2 +
         platformImage.width -
         platformSmallTallImage.width,
@@ -269,12 +217,43 @@ function init() {
       image: platformImage,
     }),
     new Platform({
-      x: platformImage.width * 4 + 300 - 2,
+      x: platformImage.width * 4 + 12 - 5 + platformImage.width - 
+      platformSmallTallImage.width,
+      y: 470,
+      image: createImage(platformSmallTall),
+    }),
+    new Platform({
+      x: platformImage.width * 5 + 700 - 2,
       y: 470,
       image: platformImage,
     }),
     new Platform({
-      x: platformImage.width * 5 + 700 - 2,
+      x: platformImage.width * 6 + 900 +200,
+      y: 470,
+      image: platformImage,
+    }),
+    new Platform({
+      x: platformImage.width * 7 + 800 -2,
+      y: 470,
+      image: platformImage,
+    }),
+    new Platform({
+      x:platformImage.width * 8 + 900 - 2 + platformImage.width - 
+      platformSmallTallImage.width,
+      y: 350,
+      image: createImage(platformSmallTall),
+    }),
+    new Platform({
+      x:platformImage.width * 9 +
+        900 -
+        2 +
+        platformImage.width -
+        platformSmallTallImage.width,
+      y: 270,
+      image: createImage(platformSmallTall),
+    }),
+    new Platform({
+      x: platformImage.width * 10 + 1200 -2,
       y: 470,
       image: platformImage,
     }),
@@ -296,8 +275,10 @@ function init() {
 
   scrollOffset = 0;
 }
+// score handling
+
 let score = 0;
-let highScore = 0;
+// let highScore = 0;
 function drawScore(){
 if(player.velocity.y !== 0 && keys.right.pressed){
   score += 1;
@@ -314,6 +295,8 @@ c.fillText("score:"+ score, canvas.width-105, 20 )
 }
 
 }
+// pause play handling
+
 // drawScore();
 function animate() {
   requestAnimationFrame(animate);
@@ -332,40 +315,127 @@ function animate() {
   });
   
   player.update();
+
+
+// keys.play.pressed = false;
+//   function resume (){
+//     if(keys.play.pressed){
+//       c.fillStyle = "white";
+//       c.font = "20px Verdana";
+//       c.fillText("resumed", canvas.width-105, 100 )
+//     console.log("in the play")
+
+//     player.velocity.x = player.speed;
+//     if (keys.right.pressed  && player.position.x < 400) {
+//       player.velocity.x = player.speed;
+//     } else if (
+//        (keys.left.pressed && player.position.x > 100) ||
+//        (keys.left.pressed && scrollOffset === 0 && player.position.x > 0)
+//        ) {
+//          player.velocity.x = -player.speed;
+//        } else {
+//          player.velocity.x = 0;
+//        if (keys.right.pressed) {
+//          scrollOffset += player.speed;
+//          platforms.forEach((platform) => {
+//            platform.position.x -= player.speed;
+//          });
+//          genericObjects.forEach((genericObject) => {
+//            genericObject.position.x -= player.speed * 0.66;
+//          });
+//        } else if (keys.left.pressed && scrollOffset > 0) {
+//          scrollOffset -= player.speed;
+//          platforms.forEach((platform) => {
+//            platform.position.x += player.speed;
+//          });
+//          genericObjects.forEach((genericObject) => {
+//            genericObject.position.x += player.speed * 0.66;
+//          });
+//           }
+//         }
+//       }
+//   }
   
-  
-  if (keys.right.pressed && player.position.x < 400) {
-    player.velocity.x = player.speed;
-  } else if (
-    (keys.left.pressed && player.position.x > 100) ||
-    (keys.left.pressed && scrollOffset === 0 && player.position.x > 0)
-    ) {
-      player.velocity.x = -player.speed;
-    } else {
-      player.velocity.x = 0;
-    if (keys.right.pressed) {
-      scrollOffset += player.speed;
-      platforms.forEach((platform) => {
-        platform.position.x -= player.speed;
-      });
-      genericObjects.forEach((genericObject) => {
-        genericObject.position.x -= player.speed * 0.66;
-      });
-    } else if (keys.left.pressed && scrollOffset > 0) {
-      scrollOffset -= player.speed;
-      platforms.forEach((platform) => {
-        platform.position.x += player.speed;
-      });
-      genericObjects.forEach((genericObject) => {
-        genericObject.position.x += player.speed * 0.66;
-      });
-    }
-  }
+      if(keys.pause.pressed){
+        player.velocity.x = 0;
+        c.fillStyle = "white";
+        c.font = "20px Verdana";
+        c.fillText("paused", canvas.width-105, 100 )
+        if(keys.play.pressed)
+        keys.pause.pressed = false;
+          }
+          
+      else if(keys.play.pressed){
+          c.fillStyle = "white";
+          c.font = "20px Verdana";
+          c.fillText("resumed", canvas.width-105, 100 )
+        console.log("in the play")
 
-  // ////////////////////    coin collision detection
+        player.velocity.x = player.speed;
+        if (keys.right.pressed  && player.position.x < 400) {
+          player.velocity.x = player.speed;
+        } else if (
+           (keys.left.pressed && player.position.x > 100) ||
+           (keys.left.pressed && scrollOffset === 0 && player.position.x > 0)
+           ) {
+             player.velocity.x = -player.speed;
+           } else {
+             player.velocity.x = 0;
+           if (keys.right.pressed) {
+             scrollOffset += player.speed;
+             platforms.forEach((platform) => {
+               platform.position.x -= player.speed;
+             });
+             genericObjects.forEach((genericObject) => {
+               genericObject.position.x -= player.speed * 0.66;
+             });
+           } else if (keys.left.pressed && scrollOffset > 0) {
+             scrollOffset -= player.speed;
+             platforms.forEach((platform) => {
+               platform.position.x += player.speed;
+             });
+             genericObjects.forEach((genericObject) => {
+               genericObject.position.x += player.speed * 0.66;
+             });
+              }
+            }
+          }
+        
+      else{
+
+        if (keys.right.pressed  && player.position.x < 400) {
+          player.velocity.x = player.speed;
+        } else if (
+           (keys.left.pressed && player.position.x > 100) ||
+           (keys.left.pressed && scrollOffset === 0 && player.position.x > 0)
+           ) {
+             player.velocity.x = -player.speed;
+           } else {
+             player.velocity.x = 0;
+           if (keys.right.pressed) {
+             scrollOffset += player.speed;
+             platforms.forEach((platform) => {
+               platform.position.x -= player.speed;
+             });
+             genericObjects.forEach((genericObject) => {
+               genericObject.position.x -= player.speed * 0.66;
+             });
+           } else if (keys.left.pressed && scrollOffset > 0) {
+             scrollOffset -= player.speed;
+             platforms.forEach((platform) => {
+               platform.position.x += player.speed;
+             });
+             genericObjects.forEach((genericObject) => {
+               genericObject.position.x += player.speed * 0.66;
+             });
+           }
+         }
+      }  
+         
+ 
 
 
-  ////////////////////    platform collision detection
+  // platform collision detection
 
   platforms.forEach((platform) => {
     if (
@@ -422,7 +492,7 @@ function animate() {
 
   function winCelebration() {
     // Stop the game loop
-    winSound.play();
+    // winSound.play();
     cancelAnimationFrame(animate);
 
     // Play a victory jingle
@@ -495,7 +565,6 @@ function animate() {
     }
     animateFireworks();
 
-    ////////////////
 
     // Set a timeout to stop the animation and clear the interval
     setTimeout(function () {
@@ -505,17 +574,14 @@ function animate() {
   }
 
 
-
   ////////////////////win condition
-  if (scrollOffset > platformImage.width * 5 + 300 - 2) {
+  if (scrollOffset >  platformImage.width * 10 + 1150 -2) {
     winCelebration();
 
-    // score = 0;
-    // requestAnimationFrame(animate)
   }
   
   if (player.position.y > canvas.height) {
-
+    score = 0;
     setTimeout(function () {
       clearInterval(interval);
       c.clearRect(0, 0, canvas.width, canvas.height);
@@ -523,14 +589,10 @@ function animate() {
 
     c.fillStyle = "white";
         c.font = "40px Arial";
-        c.fillText(" you lose!", 300, 300);
+        c.fillText(`" you lose!" score ${score}`, 300, 300);
     init();
   }
 
-  // /////////////////////////lose condition
-  // if (player.position.y > canvas.height) {
-
-  // }
 }
 
 init();
@@ -555,6 +617,16 @@ addEventListener("keydown", ({ keyCode }) => {
       console.log("up");
       player.velocity.y -= 25;
       break;
+    case 32:
+      console.log("paused");
+      keys.pause.pressed = true;
+    //  pause();
+      break;
+    case 80:
+      console.log("play");
+      keys.play.pressed = true;
+    //  play();
+      break;
   }
 });
 
@@ -574,7 +646,18 @@ addEventListener("keyup", ({ keyCode }) => {
       break;
     case 87:
       console.log("up");
+      break;
+    case 32:
+      console.log("paused");
+      keys.right.pressed = false;
+      // pause();
+      // player.velocity.x === 0;
 
+      break;
+    case 80:
+      console.log("play");
+      keys.play.pressed = false;
+    //  play();
       break;
   }
 
