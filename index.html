@@ -1,29 +1,78 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+
     <meta charset="UTF-8" />
-    <title>Canvas Boilerplate </title>
+    <title>mario game</title>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.117.0/build/three.min.js"></script>
+
     <style>
       body {
         margin: 0;
+        padding: 20px;
         background-color: #307c73;
         display: flex;
         align-items: center;
         justify-content: center;
         height: 100vh;
       }
- 
+      #guide {
+        display: inline-block;
+        width: 190px;
+        text-align: left;
+        font-size: 24px;
+        padding: 30px;
+        background-color: darkgray;
+        margin: 15px;
+        vertical-align: top;
+        border-radius: 18px;
+      }
+      
+      #canvas {
+        float: right;
+        width: 70%;
+        
+      }
+      p{
+      text-align: left;
+      text-indent: 10px;
+      }
+      #restart-button {
+        display:flex;
+        align-items: center;
+        display: center;
+        width: 100px;
+        text-align: center;
+        font-size: 20px;
+        background-color: white;
+        margin: 15px;
+        border-radius: 18px;
+      }
     </style>
   </head>
   <body>
-    <canvas>
-      <!-- <div id="score" ></div> -->
-
-    </canvas>
-    <div id="restart-button-container">
+    
+    <div id="guide">
+      <p><u>Keys</u></p>
+      <p>W: up</p>
+      <p>A: left</p>
+      <p>S: down</p>
+      <p>D: right</p>
+      <p>Space-bar: Pause</p>
+      <p>P: Resume </p>
+    </div>
+    <div id="canvas">
+      <canvas>
+        
+      </canvas>
       <button id="restart-button" onclick="location.reload()">Play Again</button>
     </div>
+    
+    <!-- <div id="restart">
+    </div> -->
     <!-- <audio id="win" src="../src/audio/win.wav"  autoplay ></audio> -->
+  
+  
 
         <script src="./js/main.js"></script>
   </body>
