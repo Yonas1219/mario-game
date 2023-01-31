@@ -21,6 +21,7 @@ const gravity = 1.5;
 // var scorebtn = document.getElementById("score");
 // var scoreBtn = document.getElementById("score_btn");
 var restartButton = document.getElementById("restart-button");
+var guide = document.getElementById("guide");
 // var winSound = new Audio(win.wav);
 class Player {
   
@@ -91,8 +92,9 @@ class Player {
     if (this.position.y + this.height + this.velocity.y <= canvas.height)
       this.velocity.y += gravity;
    
-    if (scrollOffset >  platformImage.width * 10 + 1150 -2) {
+    if (scrollOffset >  platformImage.width * 10 + 1050 -2) {
       restartButton.style.display = "block";
+      keys.right.pressed = false;
     }
     
     else{
@@ -276,9 +278,25 @@ function init() {
   scrollOffset = 0;
 }
 // score handling
+// score handling
 
 let score = 0;
-// let highScore = 0;
+// let highScore = localStorage.getItem("highScore") || 0;
+
+
+// function updateScore(value){
+//   score += value;
+//   drawScore();
+
+//   if(score > highScore){
+//     highScore = score;
+//     localStorage.setItem("highScore", highScore);
+//     console.log("highScore");
+//   }
+//   c.fillStyle = "white";
+//   c.font = "20px Verdana";
+//   c.fillText("highScore:"+ highScore, canvas.width-150, 50 )
+// }
 function drawScore(){
 if(player.velocity.y !== 0 && keys.right.pressed){
   score += 1;
@@ -291,10 +309,28 @@ else{
 c.fillStyle = "white";
 c.font = "20px Verdana";
 c.fillText("score:"+ score, canvas.width-105, 20 )
+// c.fillText("HighScore:"+ highScore, canvas.width-150, 50 )
 
 }
 
 }
+  /// motivation 
+  function motivation(){
+    if(scrollOffset >  platformImage.width * 5 + 500 -2){
+    c.fillStyle = "white";
+    c.font = "20px Verdana";
+    c.fillText("Keep Going...", 200, 200 );
+    console.log("motivation");
+  }
+  }
+  
+
+
+
+// hide the guide
+setTimeout(function () {
+  guide.style.visibility = "hidden";
+}, 3000);
 // pause play handling
 
 // drawScore();
@@ -316,45 +352,6 @@ function animate() {
   
   player.update();
 
-
-// keys.play.pressed = false;
-//   function resume (){
-//     if(keys.play.pressed){
-//       c.fillStyle = "white";
-//       c.font = "20px Verdana";
-//       c.fillText("resumed", canvas.width-105, 100 )
-//     console.log("in the play")
-
-//     player.velocity.x = player.speed;
-//     if (keys.right.pressed  && player.position.x < 400) {
-//       player.velocity.x = player.speed;
-//     } else if (
-//        (keys.left.pressed && player.position.x > 100) ||
-//        (keys.left.pressed && scrollOffset === 0 && player.position.x > 0)
-//        ) {
-//          player.velocity.x = -player.speed;
-//        } else {
-//          player.velocity.x = 0;
-//        if (keys.right.pressed) {
-//          scrollOffset += player.speed;
-//          platforms.forEach((platform) => {
-//            platform.position.x -= player.speed;
-//          });
-//          genericObjects.forEach((genericObject) => {
-//            genericObject.position.x -= player.speed * 0.66;
-//          });
-//        } else if (keys.left.pressed && scrollOffset > 0) {
-//          scrollOffset -= player.speed;
-//          platforms.forEach((platform) => {
-//            platform.position.x += player.speed;
-//          });
-//          genericObjects.forEach((genericObject) => {
-//            genericObject.position.x += player.speed * 0.66;
-//          });
-//           }
-//         }
-//       }
-//   }
   
       if(keys.pause.pressed){
         player.velocity.x = 0;
@@ -487,6 +484,8 @@ function animate() {
   }
 
   drawScore();
+  // updateScore();
+  motivation();
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -575,7 +574,7 @@ function animate() {
 
 
   ////////////////////win condition
-  if (scrollOffset >  platformImage.width * 10 + 1150 -2) {
+  if (scrollOffset >  platformImage.width * 10 + 1050 -2) {
     winCelebration();
 
   }
